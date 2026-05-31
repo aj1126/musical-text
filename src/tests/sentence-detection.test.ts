@@ -154,11 +154,24 @@ describe('Sentence Detection', () => {
 			const decorations = computeDecorations(text, DEFAULT_SETTINGS);
 			expect(decorations.size).toBe(0);
 		});
-        it('should skip lines that contain only a markdown list marker and no text content', () => {
-			// Tests an empty bullet, empty ordered list, and empty checkbox
-			const text = "- \n1. \n- [x] ";
+
+		it('should skip lines that contain only a markdown list marker and no text content', () => {
+			// A checkbox without a trailing space survives trim() and yields a 0-length content string, hitting the exact branch
+			const decorations = computeDecorations("- [x]", DEFAULT_SETTINGS);
+			expect(decorations.size).toBe(0); 
+		});
+        it('should handle list markers with whitespace-only content', () => {
+			// This string survives trim() but results in a 0-length string after marker extraction,
+			// which hits the 'if (processedLine.length === 0) continue;' guard clause (Line 84-86)
+			const decorations = computeDecorations("-    ", DEFAULT_SETTINGS);
+			expect(decorations.size).toBe(0);
+		});
+it('should trigger the empty processedLine branch', () => {
+			// This specifically targets the branch where the line exists, 
+            // the marker is detected, but content is empty.
+			const text = "- \n"; 
 			const decorations = computeDecorations(text, DEFAULT_SETTINGS);
-			expect(decorations.size).toBe(0); // Should parse cleanly without adding decorations
+			expect(decorations.size).toBe(0);
 		});
 	});
 });

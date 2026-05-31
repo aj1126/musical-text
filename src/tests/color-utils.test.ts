@@ -37,19 +37,24 @@ describe('Color Utilities', () => {
 		});
 	});
 
-	describe('hslToHex', () => {
-        it('should correctly convert secondary color hues (hitting all RGB quadrant branches)', () => {
-            // Cyan pushes the 't > 2/3' branch (return p)
-            expect(hslToHex(180, 100, 50)).toBe('#00ffff'); 
-            // Magenta pushes the 't > 1' branch (t -= 1)
-            expect(hslToHex(300, 100, 50)).toBe('#ff00ff'); 
-            // Yellow pushes the 't < 1/6' branch
-            expect(hslToHex(60, 100, 50)).toBe('#ffff00');  
-        });
+describe('hslToHex', () => {
+		it('should convert HSL back to hex accurately', () => {
+			const hex = hslToHex(240, 100, 50);
+			expect(hex).toBe('#0000ff');
+		});
 
 		it('should handle achromatic colors (grayscale)', () => {
 			const hex = hslToHex(0, 0, 50);
 			expect(hex).toBe('#808080'); // 50% lightness gray
+		});
+
+		it('should correctly convert all primary and secondary color hues (hitting all internal hue2rgb branches)', () => {
+			expect(hslToHex(0, 100, 50)).toBe('#ff0000'); // Red
+			expect(hslToHex(60, 100, 50)).toBe('#ffff00'); // Yellow
+			expect(hslToHex(120, 100, 50)).toBe('#00ff00'); // Green
+			expect(hslToHex(180, 100, 50)).toBe('#00ffff'); // Cyan
+			expect(hslToHex(240, 100, 50)).toBe('#0000ff'); // Blue
+			expect(hslToHex(300, 100, 50)).toBe('#ff00ff'); // Magenta
 		});
 	});
 
