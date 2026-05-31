@@ -136,4 +136,29 @@ describe('Sentence Detection', () => {
 			expect(iter.to).toBe(18); // length of the entire string
 		});
 	});
+
+	describe('Edge Case Document Formatting', () => {
+		it('should cleanly handle entirely blank lines or empty text inputs', () => {
+			const decorations = computeDecorations("", DEFAULT_SETTINGS);
+			expect(decorations.size).toBe(0);
+		});
+
+		it('should safely process lines containing only newline characters or whitespace loops', () => {
+			const text = "\n\n   \n\n";
+			const decorations = computeDecorations(text, DEFAULT_SETTINGS);
+			expect(decorations.size).toBe(0);
+		});
+
+		it('should bypass lines that only contain markdown syntax with zero readable words', () => {
+			const text = "- [ ] \n* \n##### ";
+			const decorations = computeDecorations(text, DEFAULT_SETTINGS);
+			expect(decorations.size).toBe(0);
+		});
+        it('should skip lines that contain only a markdown list marker and no text content', () => {
+			// Tests an empty bullet, empty ordered list, and empty checkbox
+			const text = "- \n1. \n- [x] ";
+			const decorations = computeDecorations(text, DEFAULT_SETTINGS);
+			expect(decorations.size).toBe(0); // Should parse cleanly without adding decorations
+		});
+	});
 });
