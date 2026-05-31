@@ -82,7 +82,7 @@ describe('hslToHex', () => {
 		it('should handle extreme boundary: pure black', () => {
 			const lightText = getContrastingTextColor('#000000');
 			const textHsl = hexToHsl(lightText);
-			expect(Math.round(textHsl.l)).toBeGreaterThanOrEqual(60); 
+			expect(Math.round(textHsl.l)).toBeGreaterThanOrEqual(75); 
 		});
 	});
 });

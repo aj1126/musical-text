@@ -42,6 +42,13 @@ describe('Sentence Detection', () => {
 			expect(result?.markerLength).toBe(2);
 		});
 
+		it('should detect and extract content from an ordered list', () => {
+			const result = detectMarkdownListMarker("12. A dozen points");
+			expect(result).not.toBeNull();
+			expect(result?.content).toBe("A dozen points");
+			expect(result?.markerLength).toBe(4); // "12. "
+		});
+
 		it('should detect alternate unordered list markers', () => {
 			const asteriskResult = detectMarkdownListMarker("* Point one");
 			expect(asteriskResult?.content).toBe("Point one");
