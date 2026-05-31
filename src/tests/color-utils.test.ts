@@ -35,14 +35,26 @@ describe('Color Utilities', () => {
 			// Light pink background
 			const darkText = getContrastingTextColor('#ffb6c1');
 			const textHsl = hexToHsl(darkText);
-            expect(Math.round(textHsl.l)).toBeLessThanOrEqual(26); // allowed for floating-point variance
+			expect(Math.round(textHsl.l)).toBeLessThanOrEqual(26); 
 		});
 
 		it('should return a light text color for a dark background', () => {
 			// Dark blue background
 			const lightText = getContrastingTextColor('#00008b');
 			const textHsl = hexToHsl(lightText);
-			expect(textHsl.l).toBeGreaterThanOrEqual(75); // Lightness should jump to ~75-85%
+			expect(textHsl.l).toBeGreaterThanOrEqual(75); 
+		});
+
+		it('should handle extreme boundary: pure white', () => {
+			const darkText = getContrastingTextColor('#ffffff');
+			const textHsl = hexToHsl(darkText);
+			expect(textHsl.l).toBeLessThanOrEqual(25); // Must be dark enough to read
+		});
+
+		it('should handle extreme boundary: pure black', () => {
+			const lightText = getContrastingTextColor('#000000');
+			const textHsl = hexToHsl(lightText);
+			expect(textHsl.l).toBeGreaterThanOrEqual(60); // Must be bright enough to read
 		});
 	});
 });

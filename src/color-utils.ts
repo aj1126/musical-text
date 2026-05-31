@@ -115,10 +115,12 @@ export function getContrastingTextColor(backgroundColor: string): string {
 	let newLightness: number;
 	if (hsl.l > 50) {
 		// Light background - use dark text (15-25% lightness)
-		newLightness = Math.max(15, hsl.l - 60);
+		// Clamp between 15 and 25
+		newLightness = Math.min(25, Math.max(15, hsl.l - 60));
 	} else {
 		// Dark background - use light text (75-85% lightness)
-		newLightness = Math.min(85, hsl.l + 60);
+		// Clamp between 75 and 85
+		newLightness = Math.max(75, Math.min(85, hsl.l + 60));
 	}
 
 	// Increase saturation slightly for better visibility while maintaining hue
